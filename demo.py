@@ -42,28 +42,19 @@ if 'Region' in df.columns and 'State' in df.columns:
 else:
     st.error("Error: 'Region' or 'State' column not found in the DataFrame.")
 
-# prompt: imprime una grafica de pastel usando la columna Category y los filtros de Region y State, tener en cuenta que los estados tienen que cambiar conforme a la Region
+# prompt: Con la columa Category y los filtros ya creados previamente, imprime una grafica de pastel donde se muestren los resultados de los filtros
 
-import pandas as pd
-import plotly.express as px
-
-# Assuming the file is in the current working directory.
-# If not, provide the full path to the file.
-try:
-    df = pd.read_excel("SalidaFinal.xlsx")
-
-    # Assuming 'Region', 'State', and 'Category' are column names in your DataFrame.
-    # Replace with your actual column names if different.
-    if 'Region' not in df.columns or 'State' not in df.columns or 'Category' not in df.columns:
-        print("Error: 'Region', 'State', or 'Category' column not found in the DataFrame.")
-finally:
-    region_filter = input("Select Region: ") #Get region from user input instead of streamlit
-    filtered_df_region = df[df['Region'] == region_filter]
-
-    state_filter = input("Select State: ") #Get state from user input instead of streamlit
-    filtered_df_state = filtered_df_region[filtered_df_region['State'] == state_filter]
+# Assuming 'Category' is a column in your DataFrame.
+# Replace 'Category' with the actual column name if different.
+if 'Category' in df.columns:
+    category_filter = st.selectbox("Select Category", df['Category'].unique())
+    filtered_df_category = df[df['Category'] == category_filter]
 
     # Create the pie chart
-    fig = px.pie(filtered_df_state, names='Category', title=f'Category Distribution for {state_filter}, {region_filter}')
-    fig.show() # Display the chart
-
+    if not filtered_df_category.empty:
+      fig = px.pie(filtered_df_category, names='Category', title='Category Distribution')
+      st.plotly_chart(fig)
+    else:
+      st.write("No data available for the selected filters.")
+else:
+    st.error("Error: 'Category' column not found in the DataFrame.")
