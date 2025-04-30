@@ -65,17 +65,22 @@ import pandas as pd
 try:
     df = pd.read_excel("SalidaFinal.xlsx")
 
-    # Assuming 'Region', 'State', and 'Category' are column names in your DataFrame.
-    # Replace with your actual column names if different.
-    if 'Region' not in df.columns or 'State' not in df.columns or 'Category' not in df.columns:
-        st.error("Error: 'Region', 'State', or 'Category' column not found in the DataFrame.")
-    else:
-        region_filter = st.selectbox("Select Region", df['Region'].unique())
-        filtered_df_region = df[df['Region'] == region_filter]
+# Assuming 'Region', 'State', and 'Category' are column names in your DataFrame.
+# Replace with your actual column names if different.
+if 'Region' not in df.columns or 'State' not in df.columns or 'Category' not in df.columns:
+    st.error("Error: 'Region', 'State', or 'Category' column not found in the DataFrame.")
+else:
+    region_filter = st.selectbox("Select Region", df['Region'].unique())
+    filtered_df_region = df[df['Region'] == region_filter]
 
-        state_filter = st.selectbox("Select State", filtered_df_region['State'].unique())
-        filtered_df_state = filtered_df_region[filtered_df_region['State'] == state_filter]
+    state_filter = st.selectbox("Select State", filtered_df_region['State'].unique())
+    filtered_df_state = filtered_df_region[filtered_df_region['State'] == state_filter]
 
-        # Create the pie chart
-        fig = px.pie(filtered_df_state, names='Category', title=f'Category Distribution for {state_filter}, {region_filter}')
-        st.plotly_chart(fig)
+# Create the pie chart
+    fig = px.pie(filtered_df_state, names='Category', title=f'Category Distribution for {state_filter}, {region_filter}')
+    st.plotly_chart(fig)
+
+except FileNotFoundError:
+    st.error("Error: 'SalidaFinal.xlsx' not found. Please check the file path.")
+except Exception as e:
+    st.error(f"An error occurred: {e}")
