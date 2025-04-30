@@ -27,34 +27,48 @@ except FileNotFoundError:
 except Exception as e:
     st.error(f"An error occurred: {e}")
 
-# prompt: usando el dataframe df, crear un filtro con la columna Region, y dentro de ese filtro crear otro filtro con la columna State
+# prompt: usando el dataframe df, crea un filtro con streamlit de la columna Region, y otro filtro con los resultados  del filtro Region usando la columna State. Tambien crea una grafica de pastel con los resultados
 
-# Assuming 'Region' and 'State' are column names in your DataFrame.
-# Replace with your actual column names if different.
-if 'Region' in df.columns and 'State' in df.columns:
+import pandas as pd
+import streamlit as st
+import plotly.express as px
+
+# Assuming the file is in the current working directory.
+# If not, provide the full path to the file.
+try:
+    df = pd.read_excel("SalidaFinal.xlsx")
+except FileNotFoundError:
+    st.error("Error: 'SalidaFinal.xlsx' not found. Please check the file path.")
+    st.stop()  # Stop execution if the file is not found
+except Exception as e:
+    st.error(f"An error occurred: {e}")
+    st.stop()
+
+# Region filter
+if 'Region' in df.columns:
     region_filter = st.selectbox("Select Region", df['Region'].unique())
     filtered_df_region = df[df['Region'] == region_filter]
+else:
+    st.error("Error: 'Region' column not found in the DataFrame.")
+    st.stop()
 
+# State filter based on the selected region
+if 'State' in filtered_df_region.columns:
     state_filter = st.selectbox("Select State", filtered_df_region['State'].unique())
     filtered_df_state = filtered_df_region[filtered_df_region['State'] == state_filter]
-
-    st.write(filtered_df_state)
 else:
-    st.error("Error: 'Region' or 'State' column not found in the DataFrame.")
+    st.error("Error: 'State' column not found in the DataFrame.")
+    st.stop()
 
-# prompt: Con la columa Category y los filtros ya creados previamente, imprime una grafica de pastel donde se muestren los resultados de los filtros
+# Display the filtered data
+st.write(filtered_df_state)
 
-# Assuming 'Category' is a column in your DataFrame.
-# Replace 'Category' with the actual column name if different.
-if 'Category' in df.columns:
-    category_filter = st.selectbox("Select Category", df['Category'].unique())
-    filtered_df_category = df[df['Category'] == category_filter]
-
-    # Create the pie chart
-    if not filtered_df_category.empty:
-      fig = px.pie(filtered_df_category, names='Category', title='Category Distribution')
+# Create a pie chart based on the final filtered data
+if not filtered_df_state.empty:  # Check if the DataFrame is not empty
+    if 'Sales' in filtered_df_state.columns: # Check if 'Sales' column exists
+      fig = px.pie(filtered_df_state, names='State', values='Sales', title='Sales Distribution by State')
       st.plotly_chart(fig)
     else:
-      st.write("No data available for the selected filters.")
+        st.error("Error: 'Sales' column not found in the DataFrame. Cannot create pie chart.")
 else:
-    st.error("Error: 'Category' column not found in the DataFrame.")
+    st.warning("The filtered DataFrame is empty. Cannot create a pie chart.")
