@@ -42,23 +42,19 @@ if 'Region' in df.columns and 'State' in df.columns:
 else:
     st.error("Error: 'Region' or 'State' column not found in the DataFrame.")
 
-# Assuming the file is in the current working directory.
-# If not, provide the full path to the file.
-try:
-    df = pd.read_excel("SalidaFinal.xlsx")
+# prompt: Crea una grafica de pastel de las categorias de los productos y agregale filtros, tener en cuenta  que los estados tienen que cambiar conforme la region
 
-    # --- Sidebar filters ---
-    st.sidebar.header("Filters")
-    selected_region = st.sidebar.selectbox("Select Region", df['Region'].unique())
-    selected_state = st.sidebar.selectbox("Select State", df[df['Region'] == selected_region]['State'].unique())
+# Assuming 'Categoria' is the column name for product categories.
+# Replace 'Categoria' with your actual column name if different.
+if 'Categoria' in df.columns:
+    region_filter = st.selectbox("Select Region", df['Region'].unique())
+    filtered_df_region = df[df['Region'] == region_filter]
 
+    state_filter = st.selectbox("Select State", filtered_df_region['State'].unique())
+    filtered_df_state = filtered_df_region[filtered_df_region['State'] == state_filter]
 
-    # --- Filtering the dataframe ---
-    filtered_df = df[(df['Region'] == selected_region) & (df['State'] == selected_state)]
-
-    # --- Pie chart ---
-    if 'Category' in filtered_df.columns:  # Check if the 'Category' column exists
-        fig = px.pie(filtered_df, names='Category', title='Product Categories')
-        st.plotly_chart(fig)
-    else:
-        st.error("Error: 'Category' column not found in the DataFrame.")
+    # Create the pie chart
+    fig = px.pie(filtered_df_state, names='Categoria', title='Product Categories Distribution')
+    st.plotly_chart(fig)
+else:
+    st.error("Error: 'Categoria' column not found in the DataFrame.")
