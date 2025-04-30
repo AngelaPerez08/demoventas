@@ -67,7 +67,3 @@ finally:
     fig = px.pie(filtered_df_state, names='Category', title=f'Category Distribution for {state_filter}, {region_filter}')
     fig.show() # Display the chart
 
-except FileNotFoundError:
-    print("Error: 'SalidaFinal.xlsx' not found. Please check the file path.")
-except Exception as e:
-    print(f"An error occurred: {e}")
