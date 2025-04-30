@@ -56,7 +56,7 @@ try:
     # Replace with your actual column names if different.
     if 'Region' not in df.columns or 'State' not in df.columns or 'Category' not in df.columns:
         print("Error: 'Region', 'State', or 'Category' column not found in the DataFrame.")
-else:
+finally:
     region_filter = input("Select Region: ") #Get region from user input instead of streamlit
     filtered_df_region = df[df['Region'] == region_filter]
 
