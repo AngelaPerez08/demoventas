@@ -42,12 +42,6 @@ if 'Region' in df.columns and 'State' in df.columns:
 else:
     st.error("Error: 'Region' or 'State' column not found in the DataFrame.")
 
-# prompt: Crea una grafica de pastel de las categorias de los productos y agregale los filtros de Region y State
-
-import pandas as pd
-import streamlit as st
-import plotly.express as px
-
 # Assuming the file is in the current working directory.
 # If not, provide the full path to the file.
 try:
@@ -59,20 +53,12 @@ try:
     selected_state = st.sidebar.selectbox("Select State", df[df['Region'] == selected_region]['State'].unique())
 
 
-# --- Filtering the dataframe ---
+    # --- Filtering the dataframe ---
     filtered_df = df[(df['Region'] == selected_region) & (df['State'] == selected_state)]
 
-# --- Pie chart ---
+    # --- Pie chart ---
     if 'Category' in filtered_df.columns:  # Check if the 'Category' column exists
-    fig = px.pie(filtered_df, names='Category', title='Product Categories')
-    st.plotly_chart(fig)
-else:
-    st.error("Error: 'Category' column not found in the DataFrame.")
-
-
-except FileNotFoundError:
-    st.error("Error: 'SalidaFinal.xlsx' not found. Please check the file path.")
-except KeyError as e:
-    st.error(f"Error: Column '{e}' not found in the DataFrame. Please check your column names.")
-except Exception as e:
-    st.error(f"An error occurred: {e}")
+        fig = px.pie(filtered_df, names='Category', title='Product Categories')
+        st.plotly_chart(fig)
+    else:
+        st.error("Error: 'Category' column not found in the DataFrame.")
