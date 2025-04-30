@@ -69,8 +69,3 @@ except FileNotFoundError:
     st.error("Error: 'SalidaFinal.xlsx' not found. Please check the file path.")
 except Exception as e:
     st.error(f"An error occurred: {e}")
-
-except FileNotFoundError:
-    st.error("Error: 'SalidaFinal.xlsx' not found. Please check the file path.")
-except Exception as e:
-    st.error(f"An error occurred: {e}")
