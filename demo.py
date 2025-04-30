@@ -42,19 +42,17 @@ if 'Region' in df.columns and 'State' in df.columns:
 else:
     st.error("Error: 'Region' or 'State' column not found in the DataFrame.")
 
-# prompt: con los filtros de la columna Region y State, imprime una grafica de pastel con la columna Category
+# prompt: muestra el dataframe filtrado de la instruccion anterior, y junto con eso imprime una grafica de pastel con la columna Category
 
-# Assuming 'Region', 'State', and 'Category' are column names in your DataFrame.
-# Replace with your actual column names if different.
-if 'Region' in df.columns and 'State' in df.columns and 'Category' in df.columns:
-    region_filter = st.selectbox("Select Region", df['Region'].unique())
-    filtered_df_region = df[df['Region'] == region_filter]
+import plotly.express as px
 
-    state_filter = st.selectbox("Select State", filtered_df_region['State'].unique())
-    filtered_df_state = filtered_df_region[filtered_df_region['State'] == state_filter]
-
-    # Create the pie chart
-    fig = px.pie(filtered_df_state, names='Category', title='Category Distribution')
+# Assuming 'Category' is a column in your DataFrame.
+# Replace 'Category' with the actual column name if different.
+if 'Category' in df.columns:
+    fig = px.pie(df, names='Category', title='Distribution of Categories')
     st.plotly_chart(fig)
 else:
-    st.error("Error: 'Region', 'State', or 'Category' column not found in the DataFrame.")
+    st.error("Error: 'Category' column not found in the DataFrame.")
+
+# Display the filtered DataFrame (assuming filtered_df_state is defined from previous code)
+st.write(filtered_df_state)
