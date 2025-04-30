@@ -42,3 +42,32 @@ if 'Region' in df.columns and 'State' in df.columns:
 else:
     st.error("Error: 'Region' or 'State' column not found in the DataFrame.")
 
+# prompt: imprime una grafica de pastel usando la columna Category y los filtros de Region y State, tener en cuenta que los estados tienen que cambiar conforme a la Region
+
+import pandas as pd
+import plotly.express as px
+
+# Assuming the file is in the current working directory.
+# If not, provide the full path to the file.
+try:
+    df = pd.read_excel("SalidaFinal.xlsx")
+
+    # Assuming 'Region', 'State', and 'Category' are column names in your DataFrame.
+    # Replace with your actual column names if different.
+    if 'Region' not in df.columns or 'State' not in df.columns or 'Category' not in df.columns:
+        print("Error: 'Region', 'State', or 'Category' column not found in the DataFrame.")
+else:
+    region_filter = input("Select Region: ") #Get region from user input instead of streamlit
+    filtered_df_region = df[df['Region'] == region_filter]
+
+    state_filter = input("Select State: ") #Get state from user input instead of streamlit
+    filtered_df_state = filtered_df_region[filtered_df_region['State'] == state_filter]
+
+    # Create the pie chart
+    fig = px.pie(filtered_df_state, names='Category', title=f'Category Distribution for {state_filter}, {region_filter}')
+    fig.show() # Display the chart
+
+except FileNotFoundError:
+    print("Error: 'SalidaFinal.xlsx' not found. Please check the file path.")
+except Exception as e:
+    print(f"An error occurred: {e}")
