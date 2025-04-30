@@ -54,7 +54,5 @@ if 'Categoria' in df.columns:
     filtered_df_state = filtered_df_region[filtered_df_region['State'] == state_filter]
 
     # Create the pie chart
-    fig = px.pie(filtered_df_state, names='Categoria', title='Product Categories Distribution')
+    fig = px.pie(filtered_df_state, names='Category', title='Product Categories Distribution')
     st.plotly_chart(fig)
-else:
-    st.error("Error: 'Categoria' column not found in the DataFrame.")
